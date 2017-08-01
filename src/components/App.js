@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import md5 from 'md5';
-import axios from 'axios';
+import $ from 'jquery';
 import _ from 'lodash';
 
 import CharacterList from './character-list';
@@ -28,15 +28,15 @@ class App extends Component {
   GetInitialChararcters() {
     // axios promise yapısını kullanacağız. promiselerde eğer sonuç başarılı ise then extensionu...
     // içine bir parametre gönderiyor. bizde o parametreyi alacağız ve state'imizi güncelleyeceğiz.
-    axios.get(`${API_URL}/characters?${auth}&limit=5`).then(result => {
-      const characters = result.data.data.results;
+    $.getJSON(`${API_URL}/characters?${auth}&limit=5`, result => {
+      const characters = result.data.results;
       this.setState({ characters });
     });
   }
 
   CharacterSearch(term) {
-    axios.get(`${API_URL}/characters?${auth}&limit=5&nameStartsWith=${term}`).then(result => {
-      const characters = result.data.data.results;
+    $.getJSON(`${API_URL}/characters?${auth}&limit=5&nameStartsWith=${term}`, result => {
+      const characters = result.data.results;
       this.setState({ characters });
     });
   }
