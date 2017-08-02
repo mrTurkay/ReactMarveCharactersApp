@@ -3,7 +3,12 @@ import _ from 'lodash';
 
 const Detail = props => {
   const { character } = props;
-  if (!character) return <h4>Loading...</h4>;
+  if (!character)
+    return (
+      <div>
+        <span />
+      </div>
+    );
   return (
     <div className="col-md-8">
       <div className="details">

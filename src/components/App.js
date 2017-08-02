@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import md5 from 'md5';
 import $ from 'jquery';
-import _ from 'lodash';
 
 import CharacterList from './character-list';
 import Detail from './detail';
@@ -18,11 +17,13 @@ class App extends Component {
     super(props);
 
     this.state = {
-      characters: [],
+      characters: null,
       selectedCharacter: null,
+      term: null,
     };
 
     this.GetInitialChararcters();
+    this.CharacterSearch = this.CharacterSearch.bind(this);
   }
 
   GetInitialChararcters() {
@@ -39,6 +40,7 @@ class App extends Component {
       const characters = result.data.results;
       this.setState({ characters });
     });
+    this.setState({ term });
   }
 
   CharacterSelect(character) {
@@ -46,22 +48,24 @@ class App extends Component {
   }
 
   render() {
-    const characterSearch = _.debounce(term => {
-      this.CharacterSearch(term);
-    }, 500);
-
     return (
       <div className="container">
-        <SearchBar onSearchTermChange={characterSearch} />
-        <CharacterList
-          characters={this.state.characters}
-          onCharacterSelect={this.CharacterSelect.bind(this)}
-        />
-        <Detail
-          character={
-            this.state.selectedCharacter ? this.state.selectedCharacter : this.state.characters[0]
-          }
-        />
+        <SearchBar onSearchButtonClick={this.CharacterSearch} />
+        {this.state.characters &&
+          <div>
+            <CharacterList
+              characters={this.state.characters}
+              term={this.state.term}
+              onCharacterSelect={this.CharacterSelect.bind(this)}
+            />
+            <Detail
+              character={
+                this.state.selectedCharacter
+                  ? this.state.selectedCharacter
+                  : this.state.characters[0]
+              }
+            />
+          </div>}
       </div>
     );
   }
